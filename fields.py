@@ -8,7 +8,7 @@ from cells import Cell
 
 
 class Field:
-    def __init__(self, height=10, width=20, density=5):
+    def __init__(self, height=22, width=78, density=3):
         self.height = height
         self.width = width
         self.field = []
@@ -39,27 +39,12 @@ class Field:
                 )
                 self.field[row].append(cell)
 
-    def show_field(self):
-        show = ""
-        line = "+--" * len(self.field[0]) + "+\n"
-        show = show + line
-        for row in self.field:
-            show = show + ('|')
-            for cell in row:
-                if cell.live:
-                    show = show + "88|"
-                else:
-                    show = show + "  |"
-            show = show + "\n"
-            show = show + line
-        print(show)
-
     def check_alive(self):
         for row in self.field:
             for cell in row:
                 cell.is_alive()
 
-    def step(self):
+    def make_step(self):
         for row in self.field:
             for cell in row:
                 cell.next_step()
