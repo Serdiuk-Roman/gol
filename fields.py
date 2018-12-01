@@ -1,65 +1,69 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+
 import random
-import time
 
 from cells import Cell
 
 
 class Field:
-    def __init__(self, height, weigth):
+    def __init__(self, height=10, width=20, density=5):
         self.height = height
-        self.weigth = weigth
+        self.width = width
         self.field = []
 
-    def inst_point(self):
-        napovnenist = 0.7
-        num = random.random()
-        if num >= napovnenist:
-            return True
+        if density < 1:
+            self.density = 1
+        elif density > 9:
+            self.density = 9
         else:
+            self.density = density
+
+    def set_cell(self):
+        num = random.random()
+        if num >= self.density / 10:
             return False
+        else:
+            return True
 
     def gen_field(self):
         for row in range(self.height):
             self.field.append([])
-            for cell in range(self.weigth):
+            for cell in range(self.width):
                 cell = Cell(
-                    self.field,
-                    self.inst_point(),
+                    self,
+                    self.set_cell(),
                     cell,
                     row
                 )
                 self.field[row].append(cell)
 
     def show_field(self):
+        show = ""
+        line = "+--" * len(self.field[0]) + "+\n"
+        show = show + line
         for row in self.field:
-            show_row = []
+            show = show + ('|')
             for cell in row:
                 if cell.live:
-                    show_row.append("O")
+                    show = show + "88|"
                 else:
-                    show_row.append("_")
-            print(*show_row)
+                    show = show + "  |"
+            show = show + "\n"
+            show = show + line
+        print(show)
 
-    def show_neib(self):
+    def check_alive(self):
         for row in self.field:
-            show_row = []
             for cell in row:
-                show_row.append(cell.neiborhuds)
-            print(*show_row)
+                cell.is_alive()
 
+    def step(self):
+        for row in self.field:
+            for cell in row:
+                cell.next_step()
 
-# if __name__=="__main__":
-field = Field(10, 20)
-field.gen_field()
-while True:
-    # field.show_neib()
-    field.show_field()
-    for row in field.field:
-        for cell in row:
-            cell.is_a_live()
-    for row in field.field:
-        for cell in row:
-            cell.set_next_step()
-    print("\n\n\n")
-    time.sleep(1)
-
+    def make_mask(self):
+        mask = [[cell.live for cell in row] for row in self.field]
+        return mask
