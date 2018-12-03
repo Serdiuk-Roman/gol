@@ -14,27 +14,26 @@ class Game:
         self.stop = False
 
     def init_place(self):
-
         self.place = Field()
         self.place.gen_field()
         self.current = self.place.make_mask()
 
-    def check_prev_steps(self):
+    def changes(self):
         self.current = self.place.make_mask()
 
         if self.current == self.previous_step:
-            return True
+            return False
         elif self.current == self.two_steps_ago:
-            return True
+            return False
         else:
             self.two_steps_ago = self.previous_step
             self.previous_step = self.current
-            return False
+            return True
 
     def step(self):
         self.place.check_alive()
         self.place.make_step()
-        if self.check_prev_steps():
+        if not self.changes():
             self.stop = True
 
 

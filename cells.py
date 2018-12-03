@@ -12,7 +12,7 @@ class Cell:
         self.cord_y = cord_y
         self.neighbors = 0
 
-    def check_cell(self, index_x, index_y):
+    def check_cell(self, index_y, index_x):
         if index_y < 0:
             index_y = self.observer.height + index_y
         if index_y >= self.observer.height:
@@ -26,17 +26,18 @@ class Cell:
             self.neighbors += 1
 
     def coun_neighbors_in_line(self, index_y):
-        self.check_cell(self.cord_x - 1, index_y)
-        self.check_cell(self.cord_x, index_y)
-        self.check_cell(self.cord_x + 1, index_y)
+        self.check_cell(index_y, self.cord_x - 1)
+        self.check_cell(index_y, self.cord_x)
+        self.check_cell(index_y, self.cord_x + 1)
 
     def count_neighbors(self):
         self.neighbors = 0
 
-        self.check_cell(self.cord_x - 1, self.cord_y)
-        self.check_cell(self.cord_x + 1, self.cord_y)
-
         self.coun_neighbors_in_line(self.cord_y - 1)
+
+        self.check_cell(self.cord_y, self.cord_x - 1)
+        self.check_cell(self.cord_y, self.cord_x + 1)
+
         self.coun_neighbors_in_line(self.cord_y + 1)
 
     def is_alive(self):

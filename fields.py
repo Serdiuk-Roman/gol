@@ -8,24 +8,15 @@ from cells import Cell
 
 
 class Field:
-    def __init__(self, height=22, width=78, density=3):
-        self.height = height
-        self.width = width
+    def __init__(self):
+        self.height = 22
+        self.width = 78
         self.field = []
+        self.density = random.randint(3, 7)
 
-        if density < 1:
-            self.density = 1
-        elif density > 9:
-            self.density = 9
-        else:
-            self.density = density
-
-    def set_cell(self):
-        num = random.random()
-        if num >= self.density / 10:
-            return False
-        else:
-            return True
+    def set_alive(self):
+        chance = random.randint(0, 10)
+        return chance >= self.density
 
     def gen_field(self):
         for row in range(self.height):
@@ -33,7 +24,7 @@ class Field:
             for cell in range(self.width):
                 cell = Cell(
                     self,
-                    self.set_cell(),
+                    self.set_alive(),
                     cell,
                     row
                 )
@@ -50,5 +41,8 @@ class Field:
                 cell.next_step()
 
     def make_mask(self):
-        mask = [[cell.live for cell in row] for row in self.field]
+        mask = [
+            [cell.live for cell in row]
+            for row in self.field
+        ]
         return mask
